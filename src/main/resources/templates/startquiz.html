@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${quiz.quizname}">Quiz</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+
+        .quiz-container {
+            width: 80%;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        .quiz-header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quiz-title {
+            margin: 0;
+        }
+
+        .timer {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .question-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .option {
+            display: block;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background: #f0f0f0;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .next-btn {
+            background: #222;
+            color: white;
+        }
+
+        .previous-btn {
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+
+    <!-- Quiz Header -->
+
+    <div class="quiz-header">
+
+        <h1 class="quiz-title"
+            th:text="${quiz.quizname}">
+            Quiz Name
+        </h1>
+
+        <div class="timer">
+            Time: <span id="timer">--:--</span>
+        </div>
+
+    </div>
+
+
+    <!-- FORM START -->
+
+    <form th:action="@{/quizapp/submit}"
+          method="post"
+          id="quizForm">
+
+        <!-- Attempt ID -->
+
+        <input type="hidden"
+               name="attemptId"
+               th:value="${attempt.id}">
+
+
+        <!-- QUESTIONS -->
+
+        <div th:each="question, stat : ${questions}"
+             class="question-card">
+
+            <div class="question">
+
+                <span th:text="'Question ' + ${stat.count} + ': '">
+                    Question 1:
+                </span>
+
+                <span th:text="${question.question_title}">
+                    Question text
+                </span>
+
+            </div>
+
+
+            <!-- Option 1 -->
+
+            <label class="option">
+
+                <input type="radio"
+                       th:name="'question_' + ${question.id}"
+                       th:value="${question.option1}">
+
+                <span th:text="${question.option1}">
+                    Option 1
+                </span>
+
+            </label>
+
+
+            <!-- Option 2 -->
+
+            <label class="option">
+
+                <input type="radio"
+                       th:name="'question_' + ${question.id}"
+                       th:value="${question.option2}">
+
+                <span th:text="${question.option2}">
+                    Option 2
+                </span>
+
+            </label>
+
+
+            <!-- Option 3 -->
+
+            <label class="option">
+
+                <input type="radio"
+                       th:name="'question_' + ${question.id}"
+                       th:value="${question.option3}">
+
+                <span th:text="${question.option3}">
+                    Option 3
+                </span>
+
+            </label>
+
+
+            <!-- Option 4 -->
+
+            <label class="option">
+
+                <input type="radio"
+                       th:name="'question_' + ${question.id}"
+                       th:value="${question.option4}">
+
+                <span th:text="${question.option4}">
+                    Option 4
+                </span>
+
+            </label>
+
+        </div>
+
+
+        <!-- SUBMIT BUTTON -->
+
+        <div class="navigation">
+
+            <button type="submit"
+                    class="next-btn">
+                Submit Quiz
+            </button>
+
+        </div>
+
+    </form>
+</div>
+<!--// for dynamic time-->
+<script th:inline="javascript">
+
+    const endTime = new Date(
+        /*[[${attempt.endTime}]]*/
+    ).getTime();
+
+    const timerElement = document.getElementById("timer");
+
+    const quizForm = document.getElementById("quizForm");
+
+
+    function updateTimer() {
+
+        const now = new Date().getTime();
+
+        const remaining = endTime - now;
+
+
+        if (remaining <= 0) {
+
+            timerElement.innerText = "00:00";
+
+            clearInterval(timerInterval);
+
+            alert("Time is over!");
+
+            quizForm.requestSubmit();
+
+            return;
+        }
+
+
+        const totalSeconds =
+            Math.floor(remaining / 1000);
+
+        const minutes =
+            Math.floor(totalSeconds / 60);
+
+        const seconds =
+            totalSeconds % 60;
+
+
+        timerElement.innerText =
+            String(minutes).padStart(2, "0")
+            + ":"
+            + String(seconds).padStart(2, "0");
+    }
+
+
+    updateTimer();
+
+
+    const timerInterval =
+        setInterval(updateTimer, 1000);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Account</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #1a215a;
+            --brand-blue-dark: #151b4a;
+            --brand-black: #000000;
+            --brand-green: #d3ff3d;
+            --text-light: #f5e9f2;
+            /* --text-muted: #d9b9d1; */
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+            background: var(--brand-blue);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before,
+        body::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            background: var(--brand-green);
+            opacity: 0.1;
+            pointer-events: none;
+        }
+        body::before { width: 300px; height: 300px; top: -100px; left: -80px; }
+        body::after { width: 380px; height: 380px; bottom: -140px; right: -100px; }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            background: var(--brand-blue);
+            position: relative;
+            z-index: 1;
+        }
+        .logo {
+            width: 42px;
+            height: 42px;
+            border: 3px solid var(--brand-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--brand-green);
+            font-weight: bold;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 36px;
+            color: var(--white);
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 14px;
+        }
+        nav a { color: inherit; text-decoration: none; }
+        .cart { display: flex; align-items: center; gap: 6px; }
+
+        .overlay {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .card {
+            background: var(--white);
+            width: 100%;
+            max-width: 540px;
+            padding: 48px 44px;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+        }
+        .card h1 {
+            text-align: center;
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
+            color: var(--brand-blue);
+            margin: 0 0 36px;
+            font-size: 30px;
+            position: relative;
+        }
+        .row {
+            display: flex;
+            gap: 24px;
+        }
+        .field {
+            flex: 1;
+            margin-bottom: 22px;
+        }
+        .field input {
+            width: 100%;
+            border: none;
+            border-bottom: 2px solid #e2e0ec;
+            padding: 8px 2px;
+            font-size: 15px;
+            color: #333;
+            outline: none;
+            background: transparent;
+            transition: border-color 0.2s ease;
+        }
+        .field input::placeholder { color: #999; }
+        .field input:focus { border-bottom: 2px solid var(--brand-blue); }
+
+        .error {
+            color: #c0392b;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .global-error {
+            background: #fdecea;
+            color: #c0392b;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--brand-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            margin-top: 8px;
+            box-shadow: 0 5px 0 var(--brand-blue-dark);
+            transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.15s ease;
+        }
+        .btn:hover { background: var(--brand-blue-dark); }
+        .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--brand-blue-dark); }
+
+        .signin {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #444;
+        }
+        .signin a {
+            color: var(--brand-blue);
+            font-weight: 700;
+            text-decoration: underline;
+            text-decoration-color: var(--brand-green);
+            text-decoration-thickness: 2px;
+        }
+    </style>
+</head>
+<body>
+<div class="overlay">
+    <div class="card">
+        <h1>Create Account</h1>
+        <div class="card">
+            <h1>Sign In</h1>
+
+            <div class="global-error" th:if="${param.error}">
+                Invalid username or authentication failed.
+            </div>
+
+            <div class="global-error" th:if="${param.logout}">
+                You have been logged out successfully.
+            </div>
+
+            <a th:href="@{/oauth2/authorization/google}"
+               class="btn"
+               style="display:block;text-align:center;text-decoration:none;">
+                Continue with Google
+            </a>
+
+            <div class="signin">
+                Don't have an account?
+                <a th:href="@{/signup}">Create Account</a>
+            </div>
+        </div>
+        <!-- Global server-side error message -->
+        <div class="global-error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+        <!--        <form th:action="@{/register}" th:object="${registrationForm}" method="post">-->
+
+        <!--            <div class="row">-->
+        <!--                <div class="field">-->
+        <!--                    <input type="text" th:field="*{firstName}" placeholder="First Name" required>-->
+        <!--                    <div class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>-->
+        <!--                </div>-->
+        <!--                <div class="field">-->
+        <!--                    <input type="text" th:field="*{lastName}" placeholder="Last Name" required>-->
+        <!--                    <div class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+
+        <!--            <div class="field">-->
+        <!--                <input type="email" th:field="*{email}" placeholder="Email" required>-->
+        <!--                <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>-->
+        <!--            </div>-->
+
+        <!--            <div class="field">-->
+        <!--                <input type="password" th:field="*{password}" placeholder="Create Password" required>-->
+        <!--                <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>-->
+        <!--            </div>-->
+
+        <!--            <div class="field">-->
+        <!--                <input type="password" th:field="*{confirmPassword}" placeholder="Re-type Password" required>-->
+        <!--                <div class="error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>-->
+        <!--            </div>-->
+
+        <!--            <button type="submit" class="btn">Create account</button>-->
+
+
+
+        <!--        </form>-->
+        <!--        <a th:href="@{/oauth2/authorization/google}" class="btn"-->
+        <!--           style="display:block;text-align:center;text-decoration:none;margin-top:15px;">-->
+        <!--            Continue with Google-->
+        <!--        </a>-->
+        <!--        <div class="signin">-->
+        <!--            Already have an account? <a th:href="@{/login}">Sign in</a>-->
+        <!--        </div>-->
+        <!--    </div>-->
+        <!--</div>-->
+
+</body>
+</html>

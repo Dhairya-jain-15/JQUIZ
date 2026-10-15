@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Questions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #1a215a;
+            --brand-blue-dark: #151b4a;
+            --brand-black: #000000;
+            --brand-green: #d3ff3d;
+            --text-light: #f5e9f2;
+            /* --text-muted: #d9b9d1; */
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f4f3f8;
+            color: #2b1730;
+            padding: 40px 20px 60px;
+        }
+
+        h2 {
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
+            font-size: 2rem;
+            color: var(--brand-blue);
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        h2::after {
+            content: "";
+            display: block;
+            width: 56px;
+            height: 5px;
+            background: var(--brand-green);
+            border-radius: 3px;
+            margin: 14px auto 32px;
+        }
+
+        .question-card {
+            background: var(--white);
+            max-width: 640px;
+            margin: 0 auto 24px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(26, 33, 90, 0.1);
+            border: 1px solid rgba(26, 33, 90, 0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .question-card:hover {
+            box-shadow: 0 12px 26px rgba(26, 33, 90, 0.16);
+            transform: translateY(-2px);
+        }
+
+        .question-header{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+            border-radius: 10px;
+            margin: 10px 0px 10px 0px;
+            background-color: var(--brand-blue);
+            padding: 14px 22px;
+        }
+        .question-header h3 {
+            font-family: 'Nunito', sans-serif;
+            color: var(--white);
+        }
+        .question-header h3:first-of-type {
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--brand-blue-dark);
+            background: var(--brand-green);
+            padding: 4px 12px;
+            border-radius: 20px;
+            flex-shrink: 0;
+        }
+        .question-header h3:last-of-type {
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .options{
+            background-color: var(--white);
+            margin: 5px;
+            padding: 8px 18px 20px;
+        }
+        .options div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 2px solid #eceafc;
+            margin-bottom: 10px;
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+        .options div:hover {
+            border-color: var(--brand-blue);
+            background: #f7f8ff;
+        }
+        .options div:has(input:checked) {
+            border-color: var(--brand-green);
+            background: rgba(211, 255, 61, 0.18);
+        }
+        .options input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--brand-blue);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .options label {
+            font-weight: 600;
+            font-size: 0.98rem;
+            color: #2b1730;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        @media (max-width: 680px) {
+            .question-header { flex-wrap: wrap; }
+            .question-header h3:last-of-type { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<h2>Questions List</h2>
+<div class="question-card" th:each="q : ${questions}">
+
+    <div class="question-header">
+        <h3 th:text="${q.id}"></h3>
+        <h3 th:text="${q.question_title}"></h3>
+    </div>
+    <div class="options">
+        <div>
+            <input type="radio" name="quizOption" th:value="${q.option1}" id="opt1" />
+            <label for="opt1" th:text="${q.option1}"></label>
+        </div>
+
+        <div>
+            <input type="radio" name="quizOption" th:value="${q.option2}" id="opt2" />
+            <label for="opt2" th:text="${q.option2}"></label>
+        </div>
+
+        <div>
+            <input type="radio" name="quizOption" th:value="${q.option3}" id="opt3" />
+            <label for="opt3" th:text="${q.option3}"></label>
+        </div>
+
+        <div>
+            <input type="radio" name="quizOption" th:value="${q.option4}" id="opt4" />
+            <label for="opt4" th:text="${q.option4}"></label>
+        </div>
+    </div>
+</div>
+</body>
+</html>

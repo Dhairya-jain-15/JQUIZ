@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Quiz Result</title>
+
+</head>
+
+<body>
+
+<h1>Quiz Result</h1>
+
+<h2 th:text="${attempt.quiz.quizname}">
+    Quiz Name
+</h2>
+
+<p>
+    Score:
+    <strong th:text="${attempt.score}">
+        0
+    </strong>
+    /
+    <strong th:text="${attempt.totalQuestions}">
+        0
+    </strong>
+</p>
+
+<p>
+    Status:
+    <span th:text="${attempt.status}">
+        COMPLETED
+    </span>
+</p>
+
+<a href="/quizapp">
+    Back to Home
+</a>
+
+</body>
+
+</html>

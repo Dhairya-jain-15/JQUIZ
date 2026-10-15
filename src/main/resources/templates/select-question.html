@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Select Questions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #1a215a;
+            --brand-blue-dark: #151b4a;
+            --brand-black: #000000;
+            --brand-green: #d3ff3d;
+            --text-light: #f5e9f2;
+            /* --text-muted: #d9b9d1; */
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f4f3f8;
+            color: #2b1730;
+            padding: 0 0 60px;
+        }
+
+        /* ===== Quiz info banner ===== */
+        body > h2 {
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
+            font-size: 2.2rem;
+            color: var(--white);
+            background: var(--brand-blue);
+            text-align: center;
+            padding: 48px 24px 12px;
+        }
+
+        body > p {
+            text-align: center;
+            background: var(--brand-blue);
+            color: var(--text-light);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        body > p:first-of-type {
+            padding-bottom: 8px;
+            font-size: 1rem;
+        }
+        body > p:first-of-type span {
+            display: inline-block;
+            background: var(--brand-green);
+            color: var(--brand-blue-dark);
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin-left: 6px;
+        }
+
+        body > p:nth-of-type(2) {
+            padding: 4px 24px 40px;
+            font-size: 1.05rem;
+            font-weight: 400;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        /* ===== Form / question list ===== */
+        form {
+            max-width: 680px;
+            margin: 36px auto 0;
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        form > div {
+            background: var(--white);
+            border: 2px solid #eceafc;
+            border-radius: 16px;
+            padding: 20px 24px;
+            position: relative;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        form > div:hover {
+            box-shadow: 0 8px 20px rgba(26, 33, 90, 0.1);
+        }
+        form > div:has(input:checked) {
+            border-color: var(--brand-green);
+            background: rgba(211, 255, 61, 0.1);
+        }
+
+        hr {
+            display: none;
+        }
+
+        form > div input[type="checkbox"] {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            width: 22px;
+            height: 22px;
+            accent-color: var(--brand-blue);
+            cursor: pointer;
+        }
+
+        form > div h4 {
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--brand-blue);
+            margin-bottom: 12px;
+            padding-right: 40px;
+        }
+
+        form > div p {
+            font-size: 0.96rem;
+            color: #4a3a50;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            border-radius: 8px;
+            background: #faf9fd;
+        }
+
+        br {
+            display: none;
+        }
+
+        button[type="submit"] {
+            display: block;
+            margin: 32px auto 0;
+            background: var(--brand-blue);
+            color: var(--white);
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            font-size: 1.05rem;
+            padding: 14px 40px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 var(--brand-blue-dark);
+            transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.15s ease;
+        }
+        button[type="submit"]:hover {
+            background: var(--brand-blue-dark);
+        }
+        button[type="submit"]:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 var(--brand-blue-dark);
+        }
+
+        @media (max-width: 720px) {
+            body > h2 { font-size: 1.7rem; padding: 36px 20px 10px; }
+            form { padding: 0 16px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<h2 th:text="${quiz.quizname}"></h2>
+
+<p>
+    Category :
+    <span th:text="${quiz.category}"></span>
+</p>
+
+<p th:text="${quiz.description}"></p>
+
+<form
+        th:action="@{/quizapp/{id}/select-question(id=${quiz.id})}"
+        method="post">
+
+    <div th:each="question : ${questions}">
+
+        <hr>
+
+        <input
+                type="checkbox"
+                name="selectedIds"
+                th:value="${question.id}">
+
+        <h4 th:text="${question.question_title}"></h4>
+
+        <p th:text="${question.option1}"></p>
+
+        <p th:text="${question.option2}"></p>
+
+        <p th:text="${question.option3}"></p>
+
+        <p th:text="${question.option4}"></p>
+
+    </div>
+
+    <br>
+
+    <button type="submit">
+        Create Quiz
+    </button>
+
+</form>
+
+</body>
+</html>
